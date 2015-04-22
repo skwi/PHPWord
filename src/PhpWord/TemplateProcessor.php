@@ -115,7 +115,7 @@ class TemplateProcessor
 
         $xmlDOMDocument = new \DOMDocument();
         if (false === $xmlDOMDocument->loadXML($this->temporaryDocumentMainPart)) {
-            throw new Exception('Could not load XML from the given template.');
+            throw new Exccleption('Could not load XML from the given template.');
         }
 
         $xmlTransformed = $xsltProcessor->transformToXml($xmlDOMDocument);
@@ -234,21 +234,20 @@ class TemplateProcessor
     {
         $xmlBlock = null;
         preg_match(
-            '/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/is',
             $this->temporaryDocumentMainPart,
             $matches
         );
 
-        if (isset($matches[3])) {
-            $xmlBlock = $matches[3];
+        if (isset($matches[1])) {
+            $xmlBlock = $matches[1];
             $cloned = array();
             for ($i = 1; $i <= $clones; $i++) {
                 $cloned[] = $xmlBlock;
             }
-
             if ($replace) {
                 $this->temporaryDocumentMainPart = str_replace(
-                    $matches[2] . $matches[3] . $matches[4],
+                    $matches[0],
                     implode('', $cloned),
                     $this->temporaryDocumentMainPart
                 );
@@ -268,14 +267,14 @@ class TemplateProcessor
     public function replaceBlock($blockname, $replacement)
     {
         preg_match(
-            '/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/is',
             $this->temporaryDocumentMainPart,
             $matches
         );
 
-        if (isset($matches[3])) {
+        if (isset($matches[1])) {
             $this->temporaryDocumentMainPart = str_replace(
-                $matches[2] . $matches[3] . $matches[4],
+                $matches[0],
                 $replacement,
                 $this->temporaryDocumentMainPart
             );
