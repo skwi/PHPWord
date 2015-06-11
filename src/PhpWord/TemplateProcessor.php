@@ -115,7 +115,7 @@ class TemplateProcessor
 
         $xmlDOMDocument = new \DOMDocument();
         if (false === $xmlDOMDocument->loadXML($this->temporaryDocumentMainPart)) {
-            throw new Exccleption('Could not load XML from the given template.');
+            throw new Exception('Could not load XML from the given template.');
         }
 
         $xmlTransformed = $xsltProcessor->transformToXml($xmlDOMDocument);
