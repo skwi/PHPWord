@@ -234,7 +234,7 @@ class TemplateProcessor
     {
         $xmlBlock = null;
         preg_match(
-            '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/is',
+            '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/Uis',
             $this->temporaryDocumentMainPart,
             $matches
         );
@@ -267,7 +267,7 @@ class TemplateProcessor
     public function replaceBlock($blockname, $replacement)
     {
         preg_match(
-            '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/is',
+            '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/Uis',
             $this->temporaryDocumentMainPart,
             $matches
         );
