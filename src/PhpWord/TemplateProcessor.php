@@ -233,24 +233,26 @@ class TemplateProcessor
     public function cloneBlock($blockname, $clones = 1, $replace = true)
     {
         $xmlBlock = null;
-        preg_match(
+        preg_match_all(
             '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/Uis',
             $this->temporaryDocumentMainPart,
             $matches
         );
 
         if (isset($matches[1])) {
-            $xmlBlock = $matches[1];
-            $cloned = array();
-            for ($i = 1; $i <= $clones; $i++) {
-                $cloned[] = $xmlBlock;
-            }
-            if ($replace) {
-                $this->temporaryDocumentMainPart = str_replace(
-                    $matches[0],
-                    implode('', $cloned),
-                    $this->temporaryDocumentMainPart
-                );
+            foreach ($matches[1] as $index => $match) {
+                $xmlBlock = $match;
+                $cloned = array();
+                for ($i = 1; $i <= $clones; $i++) {
+                    $cloned[] = $xmlBlock;
+                }
+                if ($replace) {
+                    $this->temporaryDocumentMainPart = str_replace(
+                        $matches[0][$index],
+                        implode('', $cloned),
+                        $this->temporaryDocumentMainPart
+                    );
+                }
             }
         }
 
@@ -266,18 +268,20 @@ class TemplateProcessor
      */
     public function replaceBlock($blockname, $replacement)
     {
-        preg_match(
+        preg_match_all(
             '/\${' . $blockname . '}(.*)\${\/' . $blockname . '}/Uis',
             $this->temporaryDocumentMainPart,
             $matches
         );
 
         if (isset($matches[1])) {
-            $this->temporaryDocumentMainPart = str_replace(
-                $matches[0],
-                $replacement,
-                $this->temporaryDocumentMainPart
-            );
+            foreach ($matches[1] as $index => $match) {
+                $this->temporaryDocumentMainPart = str_replace(
+                    $matches[0][$index],
+                    $replacement,
+                    $this->temporaryDocumentMainPart
+                );
+            }
         }
     }
 
